@@ -95,6 +95,21 @@ function deleteTask(index) {
     renderTasks();
 
 }
+function updateStreakBar() {
+    const maxStreak = 7; // weekly goal
+    const currentStreak = streakData.streak || 0;
+
+    const percent = Math.min((currentStreak / maxStreak) * 100, 100);
+
+    document.getElementById("progressText").textContent =
+        `${currentStreak} days unstoppable 🔥`;
+
+    document.getElementById("progressFill").style.width =
+        `${percent}%`;
+    updateStreakBar();
+
+}
+
 
 addBtn.addEventListener("click", addTask);
 
@@ -107,6 +122,7 @@ taskInput.addEventListener("keydown", function(event) {
     if (text === "") return;
 
 });
+document.getElementById("progressFill").style.width = "5 days unstoppable";
 
 
 filterButtons.forEach(button => {
@@ -116,3 +132,4 @@ filterButtons.forEach(button => {
 });
 
 renderTasks();
+updateStreakBar();
