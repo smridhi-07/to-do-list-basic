@@ -83,6 +83,8 @@ tasks.push({
 });
  saveTasks();
     renderTasks(currentFilter);
+    updateNextUpCard();
+;
 
     taskInput.value = "";
  document.getElementById("dueDate").value = "";
@@ -92,6 +94,8 @@ function toggleImportant(index) {
     tasks[index].important = !tasks[index].important;
     saveTasks();
     renderTasks(currentFilter);
+   
+
 
 }
 
@@ -100,6 +104,8 @@ function toggleTask(index) {
     tasks[index].completed = !tasks[index].completed;
     saveTasks();
     renderTasks(currentFilter);
+    updateNextUpCard();
+
 
 }
 
@@ -107,6 +113,8 @@ function deleteTask(index) {
     tasks.splice(index, 1);
     saveTasks();
     renderTasks(currentFilter);
+    updateNextUpCard();
+
 
 
 }
@@ -214,21 +222,33 @@ document.addEventListener("keydown", function(event) {
         cancelEdit();
     }
 });
-// UPDATE NEXT UP CARD WITH STATS
+// UPDATE NEXT UP CARD WITH ALL UPCOMING TASKS
 function updateNextUpCard() {
     const nextUpDiv = document.getElementById("nextUpTask");
     
-    // Find first pending task
-    const nextTask = tasks.find(task => !task.completed);
+    // Get all pending tasks and sort by due date
+    const pendingTasks = tasks
+        .filter(task => !task.completed)
+        .sort((a, b) => {
+            if (!a.dueDate) return 1;
+            if (!b.dueDate) return -1;
+            return new Date(a.dueDate) - new Date(b.dueDate);
+        });
     
-    if (nextTask) {
-        nextUpDiv.innerHTML = `
-            <p><strong>${nextTask.text}</strong></p>
-            ${nextTask.dueDate ? `<p style="color: #ff6b6b; font-weight: bold;">Due: ${nextTask.dueDate}</p>` : '<p style="color: #999;">No due date</p>'}
-            <p style="font-size: 12px; color: #999;">Priority: ${nextTask.important ? '⭐ Important' : '• Normal'}</p>
-        `;
-    } else {
+    if (pendingTasks.length === 0) {
         nextUpDiv.innerHTML = `<p style="color: #999; text-align: center;">🎉 All tasks completed!</p>`;
+    } else {
+        let tasksHTML = '';
+        pendingTasks.forEach(task => {
+            tasksHTML += `
+                <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                    <p style="margin: 0 0 5px 0; font-weight: bold; color: #333;"><strong>${task.text}</strong></p>
+                    <p style="margin: 0 0 3px 0; color: #ff6b6b; font-weight: bold;">📅 ${task.dueDate || 'No date'}</p>
+                    <p style="margin: 0; font-size: 12px; color: #999;">Priority: ${task.important ? '⭐ Important' : '• Normal'}</p>
+                </div>
+            `;
+        });
+        nextUpDiv.innerHTML = tasksHTML;
     }
     
     // Update stats
@@ -261,5 +281,6 @@ function updateStats() {
     document.getElementById("totalCompleted").textContent = totalCount;
 }
 renderTasks(currentFilter);
+updateNextUpCard();
 
 updateStreakBar();
