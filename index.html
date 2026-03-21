@@ -17,6 +17,10 @@
         <div class="container">
 
             <h1>My To-Do List</h1>
+            <div class="search-section">
+            <input type="text" id="searchInput" placeholder="🔍 Search tasks...">
+            <span id="clearSearch">✕</span>
+            </div>
 
             <div class="input-section">
                 <input type="text" id="taskInput" placeholder="Enter a task...">
@@ -39,6 +43,8 @@
 
     <!-- RIGHT SIDE -->
     <div class="right-panel">
+
+        <!-- STREAK COUNT CARD -->
         <div class="card">
             <h2>🔥 Streak Count</h2>
             <p id="progressText"></p>
@@ -48,10 +54,51 @@
               <div id="progressFill"></div>
             </div>
         </div>
+         <!-- NEXT UP CARD -->
+        <div class="card">
+            <div class="next-up-container">
+                <div class="next-up-content">
+                    <h2>📋 Next Up</h2>
+                    <div id="nextUpTask">
+                        <p>No tasks yet</p>
+                    </div>
+                </div>
+                <div class="next-up-stats">
+                    <div class="stats-box">
+                        <div class="stat-item">
+                            <div class="stat-number" id="todayCompleted">0</div>
+                            <div class="stat-label">Today</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="weekCompleted">0</div>
+                            <div class="stat-label">This Week</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="totalCompleted">0</div>
+                            <div class="stat-label">Total</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        
     </div>
 
 </div>
+<!-- INLINE EDIT SECTION (appears when editing) -->
+<div id="inlineEditBox" class="inline-edit-box" style="display: none;">
+    <input type="text" id="editTaskInput" placeholder="Edit task...">
+    <input type="date" id="editDueDate">
+    <button id="saveEditBtn" onclick="saveEdit()">Save</button>
+    <button id="cancelEditBtn" onclick="cancelEdit()">Cancel</button>
+</div>
 
+        </div>
+
+ 
 <script src="script.js"></script>
 </body>
 

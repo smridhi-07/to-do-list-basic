@@ -3,6 +3,9 @@ const addBtn = document.getElementById("addBtn");
 const taskList = document.getElementById("taskList");
 const filterButtons = document.querySelectorAll(".filters button");
 const taskCounter = document.getElementById("taskCounter");
+const searchInput = document.getElementById("searchInput");
+const clearSearch = document.getElementById("clearSearch");
+
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 // load saved tasks from browser storage.
@@ -10,7 +13,7 @@ let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 
 function saveTasks() {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    localStorage.setItem("tasks", JSON.stringify(tasks));//save data in browser
 }
 tasks = tasks.map(task => ({
     text: task.text,
@@ -24,15 +27,22 @@ saveTasks();
 // Without this tasks disappear on refresh
 
 function renderTasks(filter = "all") {
+    currentFilter = filter;  // ADD THIS LINE
     taskList.innerHTML = "";
 // function draws tasks on the screen.
+let filteredTasks = tasks.filter(task => {
+    if (filter === "completed") return task.completed;
+    if (filter === "pending") return !task.completed;
+    if (filter === "important") return task.important; 
+    return true;
+});
 
-    let filteredTasks = tasks.filter(task => {
-        if (filter === "completed") return task.completed;
-        if (filter === "pending") return !task.completed;
-        if (filter === "important") return task.important; 
-        return true;
-    });
+let searchText = searchInput.value.trim().toLowerCase();
+if (searchText !== "") {
+    filteredTasks = filteredTasks.filter(task =>
+        task.text.toLowerCase().includes(searchText)
+    );
+}
 
     filteredTasks.forEach((task, index) => {
         const li = document.createElement("li");
@@ -43,14 +53,15 @@ function renderTasks(filter = "all") {
 
     li.innerHTML = `
     <div>
-        <span onclick="toggleTask(${index})">${task.important ? "⭐" : ""} ${task.text}</span>
+        <span onclick="toggleTask(${index})">${task.important ? "⭐" : ""} ${highlightText(task.text)}</span>
         ${task.dueDate ? `<div style="font-size:12px;color:gray;">📅 ${task.dueDate}</div>` : ""}
     </div>
 
-    <div>
-        <button onclick="toggleImportant(${index})">!</button>
-        <button onclick="deleteTask(${index})">X</button>
-    </div>
+   <div class="task-buttons">
+    <button class="edit-btn" onclick="openInlineEdit(${index})">✎</button>
+    <button onclick="toggleImportant(${index})">!</button>
+    <button onclick="deleteTask(${index})">X</button>
+</div>
 `;
         taskList.appendChild(li);
     });
@@ -71,7 +82,8 @@ tasks.push({
     important: false   // NEW PROPERTY
 });
  saveTasks();
-    renderTasks();
+    renderTasks(currentFilter);
+
     taskInput.value = "";
  document.getElementById("dueDate").value = "";
 }
@@ -79,20 +91,23 @@ tasks.push({
 function toggleImportant(index) {
     tasks[index].important = !tasks[index].important;
     saveTasks();
-    renderTasks();
+    renderTasks(currentFilter);
+
 }
 
 
 function toggleTask(index) {
     tasks[index].completed = !tasks[index].completed;
     saveTasks();
-    renderTasks();
+    renderTasks(currentFilter);
+
 }
 
 function deleteTask(index) {
     tasks.splice(index, 1);
     saveTasks();
-    renderTasks();
+    renderTasks(currentFilter);
+
 
 }
 function updateStreakBar() {
@@ -109,7 +124,14 @@ function updateStreakBar() {
     updateStreakBar();
 
 }
+function highlightText(text) {
+    const searchText = searchInput.value.trim();
 
+    if (!searchText) return text;
+
+    const regex = new RegExp(`(${searchText})`, "gi");
+    return text.replace(regex, `<mark>$1</mark>`);
+}
 
 addBtn.addEventListener("click", addTask);
 
@@ -130,6 +152,114 @@ filterButtons.forEach(button => {
         renderTasks(button.dataset.filter);
     });
 });
+searchInput.addEventListener("input", () => {
+    const value = searchInput.value.trim();
 
-renderTasks();
+    clearSearch.style.display = value ? "block" : "none";
+    renderTasks(currentFilter);
+
+});
+
+clearSearch.addEventListener("click", () => {
+    searchInput.value = "";
+    clearSearch.style.display = "none";
+    renderTasks(currentFilter);
+
+});
+// INLINE EDIT FUNCTIONS
+let editingIndex = null;
+let currentFilter = "all";
+
+function openInlineEdit(index) {
+    editingIndex = index;
+    const task = tasks[index];
+    
+    document.getElementById("editTaskInput").value = task.text;
+    document.getElementById("editDueDate").value = task.dueDate || "";
+    document.getElementById("inlineEditBox").style.display = "flex";
+    
+    document.getElementById("editTaskInput").focus();
+}
+
+function saveEdit() {
+    if (editingIndex === null) return;
+    
+    const newText = document.getElementById("editTaskInput").value.trim();
+    const newDueDate = document.getElementById("editDueDate").value;
+    
+    if (newText === "") {
+        alert("Task name cannot be empty!");
+        return;
+    }
+    
+    tasks[editingIndex].text = newText;
+    tasks[editingIndex].dueDate = newDueDate || null;
+    
+    saveTasks();
+    renderTasks(currentFilter);
+    cancelEdit();
+}
+
+function cancelEdit() {
+    document.getElementById("inlineEditBox").style.display = "none";
+    editingIndex = null;
+}
+
+// Save on Enter, Cancel on Escape
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Enter" && editingIndex !== null) {
+        saveEdit();
+    }
+    if (event.key === "Escape" && editingIndex !== null) {
+        cancelEdit();
+    }
+});
+// UPDATE NEXT UP CARD WITH STATS
+function updateNextUpCard() {
+    const nextUpDiv = document.getElementById("nextUpTask");
+    
+    // Find first pending task
+    const nextTask = tasks.find(task => !task.completed);
+    
+    if (nextTask) {
+        nextUpDiv.innerHTML = `
+            <p><strong>${nextTask.text}</strong></p>
+            ${nextTask.dueDate ? `<p style="color: #ff6b6b; font-weight: bold;">Due: ${nextTask.dueDate}</p>` : '<p style="color: #999;">No due date</p>'}
+            <p style="font-size: 12px; color: #999;">Priority: ${nextTask.important ? '⭐ Important' : '• Normal'}</p>
+        `;
+    } else {
+        nextUpDiv.innerHTML = `<p style="color: #999; text-align: center;">🎉 All tasks completed!</p>`;
+    }
+    
+    // Update stats
+    updateStats();
+}
+
+function updateStats() {
+    const today = new Date().toISOString().split('T')[0];
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    
+    // Count completed tasks
+    let todayCount = 0;
+    let weekCount = 0;
+    let totalCount = tasks.filter(task => task.completed).length;
+    
+    tasks.forEach(task => {
+        if (task.completed) {
+           
+            if (task.dueDate === today) {
+                todayCount++;
+            }
+            if (task.dueDate >= weekAgo && task.dueDate <= today) {
+                weekCount++;
+            }
+        }
+    });
+    
+    document.getElementById("todayCompleted").textContent = todayCount;
+    document.getElementById("weekCompleted").textContent = weekCount;
+    document.getElementById("totalCompleted").textContent = totalCount;
+}
+renderTasks(currentFilter);
+
 updateStreakBar();

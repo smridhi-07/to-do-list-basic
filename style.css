@@ -72,7 +72,7 @@ li {
 .app-layout {
     display: flex;
     padding: 40px;
-    gap: 100px;
+    gap: 80px;
     align-items: flex-start;
 }
 
@@ -85,22 +85,32 @@ li {
 .right-panel {
     flex: 1;
     display: flex; 
-    background: #fdfbfb;
+    background: transparent;
     border-radius: 10px;
-    border-color: rgb(27, 22, 22);
-    padding: 40px;
+    padding: 0;
     width: 300px;
     flex-direction: column;
-    gap: 100px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    justify-content: right;
+    gap: 20px;
+    box-shadow: none;
+    justify-content: flex-start;
 }
+.card {
+    background: #fdfbfb;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
 .progress-container {
     width: 100%;
     height: 16px;
     background: #bdb8b8;
     border-radius: 50px;
     overflow: hidden;
+    margin-top: 10px;
 }
 
 #progressFill {
@@ -111,3 +121,166 @@ li {
     transition: width 0.5s ease;
 }
 
+.search-section {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+#searchInput:focus {
+    border-color: #4facfe;
+    box-shadow: 0 0 0 3px rgba(79,172,254,0.15);
+}
+
+#clearSearch {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 14px;
+    color: #aaa;
+    display: none;
+}
+mark {
+    background-color: #fff3cd;
+    padding: 0 2px;
+    border-radius: 3px;
+}
+/* INLINE EDIT BOX */
+.inline-edit-box {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 10px 10px;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    display: flex;
+    gap: 10px;
+    z-index: 100;
+    align-items: center;
+    flex-wrap: wrap;
+    min-width: 500px;
+}
+
+.inline-edit-box input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    min-width: 150px;
+}
+
+.inline-edit-box button {
+    padding: 10px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#saveEditBtn {
+    background-color: #28a745;
+    color: white;
+}
+
+#saveEditBtn:hover {
+    background-color: #88e79d;
+}
+
+#cancelEditBtn {
+    background-color: #e2616e;
+    color: white;
+}
+
+#cancelEditBtn:hover {
+    background-color: #c82333;
+}
+
+.edit-btn {
+    background-color: #d3e2e2 !important;
+    color: rgb(11, 1, 1) !important;
+}
+
+.edit-btn:hover {
+    opacity: 0.8;
+}
+
+.task-buttons {
+    display: flex;
+    gap: 5px;
+}
+/* NEXT UP CARD */
+.next-up-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.next-up-content {
+    flex: 1;
+}
+
+.next-up-content h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #354aaa;
+}
+
+#nextUpTask {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #354aaa;
+}
+
+#nextUpTask p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.next-up-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stats-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: bold;
+    color: #354aaa;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #999;
+    margin-top: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
