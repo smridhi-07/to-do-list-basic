@@ -78,7 +78,12 @@ li {
 
 /* Left Side */
 .left-panel {
-    width: 420px;
+    width: 490px;
+    flex-shrink: 0;
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
 }
 
 /* Right Side */
@@ -90,7 +95,7 @@ li {
     padding: 0;
     width: 300px;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
     box-shadow: none;
     justify-content: flex-start;
 }
@@ -283,4 +288,27 @@ mark {
     margin-top: 5px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+#nextUpTask {
+    max-height: 410px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+#nextUpTask::-webkit-scrollbar {
+    width: 6px;
+}
+
+#nextUpTask::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#nextUpTask::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+#nextUpTask::-webkit-scrollbar-thumb:hover {
+    background: #999;
 }
