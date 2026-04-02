@@ -25,7 +25,17 @@ saveTasks();
 
 // This stores tasks permanently in the browser.
 // Without this tasks disappear on refresh
-
+// ADD THIS FUNCTION TO TOGGLE TASK COMPLETION
+function toggleTaskComplete(taskId) {
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+        task.completed = !task.completed;
+        saveTasks();
+        renderTasks();
+        updateNextUpCard();
+        updateStats();
+    }
+}
 function renderTasks(filter = "all") {
     currentFilter = filter;  // ADD THIS LINE
     taskList.innerHTML = "";
@@ -59,6 +69,7 @@ if (searchText !== "") {
 
    <div class="task-buttons">
     <button class="edit-btn" onclick="openInlineEdit(${index})">✎</button>
+    <button class="tick-btn" onclick="toggleTask(${index})" title="Mark Complete">${task.completed ? '✓' : '✓'}</button>
     <button onclick="toggleImportant(${index})">!</button>
     <button onclick="deleteTask(${index})">X</button>
 </div>
@@ -228,10 +239,8 @@ function updateNextUpCard() {
     
     // Get all pending tasks and sort by due date
     const pendingTasks = tasks
-        .filter(task => !task.completed)
+        .filter(task => !task.completed && task.dueDate)
         .sort((a, b) => {
-            if (!a.dueDate) return 1;
-            if (!b.dueDate) return -1;
             return new Date(a.dueDate) - new Date(b.dueDate);
         });
     
@@ -253,6 +262,32 @@ function updateNextUpCard() {
     
     // Update stats
     updateStats();
+    updateDailyTasks();
+
+}
+// NEW FUNCTION: UPDATE DAILY TASKS CARD (NO DATE TASKS)
+function updateDailyTasks() {
+    const dailyTasksDiv = document.getElementById("dailyTasksList");
+    
+    if (!dailyTasksDiv) return; // If card doesn't exist, skip
+    
+    // Get all pending tasks WITHOUT dates
+    const noDatTasks = tasks.filter(task => !task.completed && !task.dueDate);
+    
+    if (noDatTasks.length === 0) {
+        dailyTasksDiv.innerHTML = `<p style="color: #999; text-align: center;">✅ No daily tasks!</p>`;
+    } else {
+        let tasksHTML = '';
+        noDatTasks.forEach(task => {
+            tasksHTML += `
+                <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                    <p style="margin: 0 0 5px 0; font-weight: bold; color: #333;"><strong>${task.text}</strong></p>
+                    <p style="margin: 0; font-size: 12px; color: #999;">Priority: ${task.important ? '⭐ Important' : '• Normal'}</p>
+                </div>
+            `;
+        });
+        dailyTasksDiv.innerHTML = tasksHTML;
+    }
 }
 
 function updateStats() {
