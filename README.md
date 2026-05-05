@@ -4,11 +4,11 @@ A simple and clean to-do list application to help you manage your daily tasks ef
 
 ## 📸 Screenshots
 
-### Main View - Task Management
-![App Screenshot - Main View](./screenshots/screenshot-1.png)
+### Main Interface
+![App Screenshot 1](./Screenshot%20todo1.png)
 
-### Dashboard View - Task Overview & Statistics
-![App Screenshot - Dashboard](./screenshots/screenshot-2.png)
+### Task Management View
+![App Screenshot 2](./Screenshot%20todo2.png)
 
 ## ✨ Features
 
@@ -18,10 +18,6 @@ A simple and clean to-do list application to help you manage your daily tasks ef
 - 💾 Tasks are saved automatically (using localStorage)
 - 🎨 Clean and simple user interface
 - 📱 Works on desktop and mobile browsers
-- 📊 View task statistics and streak count
-- 🏷️ Categorize tasks (All, Completed, Pending, Important)
-- 📅 Set due dates for tasks
-- ⭐ Mark important tasks with priority
 
 ## 🛠️ Technologies Used
 
