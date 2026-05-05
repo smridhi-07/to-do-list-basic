@@ -5,10 +5,10 @@ A simple and clean to-do list application to help you manage your daily tasks ef
 ## 📸 Screenshots
 
 ### Main Interface
-![App Screenshot 1](./screenshots/todo1.png)
+![App Screenshot 1](./Screenshot%20todo1.png)
 
 ### Task Management View
-![App Screenshot 2](./screenshots/todo2.png)
+![App Screenshot 2](./Screenshot%20todo2.png)
 
 ## ✨ Features
 
@@ -38,13 +38,10 @@ A simple and clean to-do list application to help you manage your daily tasks ef
 
 ```
 to-do-list-basic/
-├── index.html           (Main HTML file)
-├── style.css            (Styling)
-├── script.js            (JavaScript logic)
-├── screenshots/         (Screenshots folder)
-│   ├── todo1.png
-│   └── todo2.png
-└── README.md            (This file)
+├── index.html      (Main HTML file)
+├── style.css       (Styling)
+├── script.js       (JavaScript logic)
+└── README.md       (This file)
 ```
 
 ## 💡 What I Learned
