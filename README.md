@@ -2,14 +2,6 @@
 
 A simple and clean to-do list application to help you manage your daily tasks efficiently!
 
-## 📸 Screenshots
-
-### Main Interface
-![App Screenshot 1](./Screenshot%20todo1.png)
-
-### Task Management View
-![App Screenshot 2](./Screenshot%20todo2.png)
-
 ## ✨ Features
 
 - ✅ Add new tasks easily
